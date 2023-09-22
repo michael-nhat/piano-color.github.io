@@ -7,21 +7,16 @@
     <style>
         .color-box {
             width: 100px;
-          height: 100px;
-          display: inline-block;
-          margin: 5px;
-          border: 1px solid black;
-          text-align: center;
-          vertical-align: middle;
-          line-height: 50px;
-          text-transform: capitalize;
-          font-size: 14px;
+            height: 100px;
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid black;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 50px;
+            text-transform: capitalize;
+            font-size: 14px;
         }
-
-     .color-box:first-child {
-       width: 150px;
-       height: 150px;
-     }
 
         .small-text:first-letter {
             text-transform: uppercase;
@@ -30,6 +25,10 @@
         .small-text {
             font-size: 52px;
             display: block;
+        }
+
+        .selected {
+          border: 10px solid #3991fc;
         }
     </style>
 </head>
@@ -54,7 +53,10 @@
         ];
 
         const RESULT_TEXT_LENGTH = 60;
-        const MAX_BOX = 12;
+        const MAX_BOX = 24;
+
+        let bottomPointer = 0;
+        let topPointer = 0;
 
         function getRandomColor() {
             const randomIndex = Math.floor(Math.random() * colors.length);
@@ -74,17 +76,28 @@
             }
         }
 
+        function movePointer(row, pointer) {
+            const colorBoxes = row.children;
+            if (colorBoxes.length > 0) {
+                for (const box of colorBoxes) {
+                    box.classList.remove('selected');
+                }
+                pointer = (pointer + 1) % colorBoxes.length;
+                colorBoxes[pointer].classList.add('selected');
+            }
+            return pointer;
+        }
+
         document.addEventListener('keydown', (event) => {
             const key = event.key.toLowerCase();
-            const bottomRowColor = getColorName(bottomRow.children[0]?.style.backgroundColor);
-            const topRowColor = getColorName(topRow.children[0]?.style.backgroundColor);
+            const bottomRowColor = getColorName(bottomRow.children[bottomPointer]?.style.backgroundColor);
+            const topRowColor = getColorName(topRow.children[topPointer]?.style.backgroundColor);
             const validKeysBottom = ['v', 'r', 'e', 'w', 'q'];
             const validKeysTop = ['n', 'u', 'i', 'o', 'p'];
 
             if (validKeysBottom.includes(key)) {
                 if (bottomRowColor === colors[validKeysBottom.indexOf(key)].name) {
-                    removeColorBox(bottomRow);
-                    addColorBox(bottomRow, getRandomColor());
+                    bottomPointer = movePointer(bottomRow, bottomPointer);
                     addSmallText(smallText2, 'v' + smallText2.textContent);
                 } else {
                     addSmallText(smallText2, 'x' + smallText2.textContent);
@@ -97,10 +110,19 @@
                         smallText2.textContent = '';
                     }
                 }
+
+                // Reset colors and cursor if the pointer reaches the end
+                if (bottomPointer === 0) {
+                    while (bottomRow.firstChild) {
+                        bottomRow.removeChild(bottomRow.firstChild);
+                    }
+                    for (let i = 0; i < MAX_BOX; i++) {
+                        addColorBox(bottomRow, getRandomColor());
+                    }
+                }
             } else if (validKeysTop.includes(key)) {
                 if (topRowColor === colors[validKeysTop.indexOf(key)].name) {
-                    removeColorBox(topRow);
-                    addColorBox(topRow, getRandomColor());
+                    topPointer = movePointer(topRow, topPointer);
                     addSmallText(smallText1, 'v' + smallText1.textContent);
                 } else {
                     addSmallText(smallText1, 'x' + smallText1.textContent);
@@ -111,6 +133,16 @@
 
                     if (smallText2.textContent.length > RESULT_TEXT_LENGTH) {
                         smallText2.textContent = '';
+                    }
+                }
+
+                // Reset colors and cursor if the pointer reaches the end
+                if (topPointer === 0) {
+                    while (topRow.firstChild) {
+                        topRow.removeChild(topRow.firstChild);
+                    }
+                    for (let i = 0; i < MAX_BOX; i++) {
+                        addColorBox(topRow, getRandomColor());
                     }
                 }
             }

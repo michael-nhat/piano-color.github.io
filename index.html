@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color Matching Game</title>
     <style>
+     #main {
+       margin-bottom: 300px;
+     }
         .color-box {
             width: 100px;
             height: 100px;
@@ -36,7 +39,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: static;
+            position: fixed;
             bottom: 0;
             width: 100%;
             background-color: #f0f0f0;
@@ -57,13 +60,14 @@
     </style>
 </head>
 <body>
+  <div id="main" >
     <div id="top-row"></div>
     <div class="small-text" id="small-text1"></div>
     <div id="bottom-row"></div>
     <div class="small-text" id="small-text2"></div>
-    
     <input type="checkbox" id="sendTopCheckbox" checked>
     <label for="sendTopCheckbox">Top</label>
+  </div>
 
     <div class="button-container">
         <button id="buttonN">T</button>

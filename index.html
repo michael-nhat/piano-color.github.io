@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Matching Game</title>
+    <style>
+        .color-box {
+            width: 100px;
+          height: 100px;
+          display: inline-block;
+          margin: 5px;
+          border: 1px solid black;
+          text-align: center;
+          vertical-align: middle;
+          line-height: 50px;
+          text-transform: capitalize;
+          font-size: 14px;
+        }
+
+     .color-box:first-child {
+       width: 150px;
+       height: 150px;
+     }
+
+        .small-text:first-letter {
+            text-transform: uppercase;
+        }
+
+        .small-text {
+            font-size: 52px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="top-row"></div>
+    <div class="small-text" id="small-text1"></div>
+    <div id="bottom-row"></div>
+    <div class="small-text" id="small-text2"></div>
+
+    <script>
+        const bottomRow = document.getElementById('bottom-row');
+        const topRow = document.getElementById('top-row');
+        const smallText1 = document.getElementById('small-text1');
+        const smallText2 = document.getElementById('small-text2');
+
+        const colors = [
+            { name: 'Green', code: '#24a96e' },
+            { name: 'Yellow', code: '#ffb000' },
+            { name: 'Purple', code: '#7448ff' },
+            { name: 'Blue', code: '#3991fc' },
+            { name: 'Pink', code: '#ff5b76' }
+        ];
+
+        const RESULT_TEXT_LENGTH = 60;
+        const MAX_BOX = 12;
+
+        function getRandomColor() {
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            return colors[randomIndex].code;
+        }
+
+        function addColorBox(container, color) {
+            const colorBox = document.createElement('div');
+            colorBox.className = 'color-box';
+            colorBox.style.backgroundColor = color;
+            container.appendChild(colorBox);
+        }
+
+        function removeColorBox(container) {
+            if (container.children.length > 0) {
+                container.removeChild(container.children[0]);
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            const bottomRowColor = getColorName(bottomRow.children[0]?.style.backgroundColor);
+            const topRowColor = getColorName(topRow.children[0]?.style.backgroundColor);
+            const validKeysBottom = ['v', 'r', 'e', 'w', 'q'];
+            const validKeysTop = ['n', 'u', 'i', 'o', 'p'];
+
+            if (validKeysBottom.includes(key)) {
+                if (bottomRowColor === colors[validKeysBottom.indexOf(key)].name) {
+                    removeColorBox(bottomRow);
+                    addColorBox(bottomRow, getRandomColor());
+                    addSmallText(smallText2, 'v' + smallText2.textContent);
+                } else {
+                    addSmallText(smallText2, 'x' + smallText2.textContent);
+
+                    if (smallText1.textContent.length > RESULT_TEXT_LENGTH) {
+                        smallText1.textContent = '';
+                    }
+
+                    if (smallText2.textContent.length > RESULT_TEXT_LENGTH) {
+                        smallText2.textContent = '';
+                    }
+                }
+            } else if (validKeysTop.includes(key)) {
+                if (topRowColor === colors[validKeysTop.indexOf(key)].name) {
+                    removeColorBox(topRow);
+                    addColorBox(topRow, getRandomColor());
+                    addSmallText(smallText1, 'v' + smallText1.textContent);
+                } else {
+                    addSmallText(smallText1, 'x' + smallText1.textContent);
+
+                    if (smallText1.textContent.length > RESULT_TEXT_LENGTH) {
+                        smallText1.textContent = '';
+                    }
+
+                    if (smallText2.textContent.length > RESULT_TEXT_LENGTH) {
+                        smallText2.textContent = '';
+                    }
+                }
+            }
+        });
+
+        // Initial setup with random colors
+        for (let i = 0; i < MAX_BOX; i++) {
+            addColorBox(bottomRow, getRandomColor());
+            addColorBox(topRow, getRandomColor());
+        }
+
+        function addSmallText(element, text) {
+            if (text.length > RESULT_TEXT_LENGTH) {
+                text = '';
+            }
+            element.textContent = text;
+        }
+
+        function getColorName(color) {
+            if (typeof color !== 'string') {
+                return '';
+            }
+
+            const colorMatches = [
+                { name: 'Pink', code: 'rgb(255, 91, 118)' },
+                { name: 'Blue', code: 'rgb(57, 145, 252)' },
+                { name: 'Purple', code: 'rgb(116, 72, 255)' },
+                { name: 'Yellow', code: 'rgb(255, 176, 0)' },
+                { name: 'Green', code: 'rgb(36, 169, 110)' }
+            ];
+
+            for (const colorMatch of colorMatches) {
+                if (color === colorMatch.code) {
+                    return colorMatch.name;
+                }
+            }
+
+            return '';
+        }
+    </script>
+</body>
+</html>

@@ -37,13 +37,28 @@
     <div class="small-text" id="small-text1"></div>
     <div id="bottom-row"></div>
     <div class="small-text" id="small-text2"></div>
+    
+    <input type="checkbox" id="sendTopCheckbox" checked>
+    <label for="sendTopCheckbox">Toggle Link</label>
+
+    <button id="buttonN">T</button>
+    <button id="buttonU">I</button>
+    <button id="buttonI">M</button>
+    <button id="buttonO">R</button>
+    <button id="buttonP">P</button>
 
     <script>
         const bottomRow = document.getElementById('bottom-row');
         const topRow = document.getElementById('top-row');
         const smallText1 = document.getElementById('small-text1');
         const smallText2 = document.getElementById('small-text2');
-
+        const sendTopCheckbox = document.getElementById('sendTopCheckbox');
+        const buttonN = document.getElementById('buttonN');
+        const buttonU = document.getElementById('buttonU');
+        const buttonI = document.getElementById('buttonI');
+        const buttonO = document.getElementById('buttonO');
+        const buttonP = document.getElementById('buttonP');
+        
         const colors = [
             { name: 'Green', code: '#24a96e' },
             { name: 'Yellow', code: '#ffb000' },
@@ -57,6 +72,48 @@
 
         let bottomPointer = 0;
         let topPointer = 0;
+
+        // Bắt sự kiện thay đổi của checkbox để thay đổi nhãn nút
+        sendTopCheckbox.addEventListener('change', (event) => {
+            buttonN.innerText = sendTopCheckbox.checked ? 'N' : 'P';
+            buttonU.innerText = sendTopCheckbox.checked ? 'U' : 'R';
+            buttonI.innerText = sendTopCheckbox.checked ? 'I' : 'M';
+            buttonO.innerText = sendTopCheckbox.checked ? 'O' : 'I';
+            buttonP.innerText = sendTopCheckbox.checked ? 'P' : 'T';
+        });
+
+        // Bắt sự kiện click trên nút và gửi giá trị tương ứng
+        buttonN.addEventListener('click', () => {
+            const key = sendTopCheckbox.checked ? 'n' : 'q';
+            sendKeyEvent(key);
+        });
+
+        buttonU.addEventListener('click', () => {
+            const key = sendTopCheckbox.checked ? 'u' : 'w';
+            sendKeyEvent(key);
+        });
+
+        buttonI.addEventListener('click', () => {
+            const key = sendTopCheckbox.checked ? 'i' : 'e';
+            sendKeyEvent(key);
+        });
+
+        buttonO.addEventListener('click', () => {
+            const key = sendTopCheckbox.checked ? 'o' : 'r';
+            sendKeyEvent(key);
+        });
+
+        buttonP.addEventListener('click', () => {
+            const key = sendTopCheckbox.checked ? 'p' : 'v';
+            sendKeyEvent(key);
+        });
+
+        // Hàm gửi sự kiện key
+        function sendKeyEvent(key) {
+            // Gửi sự kiện key tới nơi bạn muốn xử lý
+            document.dispatchEvent(new KeyboardEvent('keydown', {'key': key}));
+          console.log('Pressed key:', key);
+        }
 
         function getRandomColor() {
             const randomIndex = Math.floor(Math.random() * colors.length);

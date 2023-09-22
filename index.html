@@ -99,6 +99,16 @@
                 if (bottomRowColor === colors[validKeysBottom.indexOf(key)].name) {
                     bottomPointer = movePointer(bottomRow, bottomPointer);
                     addSmallText(smallText2, 'v' + smallText2.textContent);
+
+                    // Reset colors and cursor only when reaching the last element
+                    if (bottomPointer === 0) {
+                        while (bottomRow.firstChild) {
+                            bottomRow.removeChild(bottomRow.firstChild);
+                        }
+                        for (let i = 0; i < MAX_BOX; i++) {
+                            addColorBox(bottomRow, getRandomColor());
+                        }
+                    }
                 } else {
                     addSmallText(smallText2, 'x' + smallText2.textContent);
 
@@ -110,20 +120,20 @@
                         smallText2.textContent = '';
                     }
                 }
-
-                // Reset colors and cursor if the pointer reaches the end
-                if (bottomPointer === 0) {
-                    while (bottomRow.firstChild) {
-                        bottomRow.removeChild(bottomRow.firstChild);
-                    }
-                    for (let i = 0; i < MAX_BOX; i++) {
-                        addColorBox(bottomRow, getRandomColor());
-                    }
-                }
             } else if (validKeysTop.includes(key)) {
                 if (topRowColor === colors[validKeysTop.indexOf(key)].name) {
                     topPointer = movePointer(topRow, topPointer);
                     addSmallText(smallText1, 'v' + smallText1.textContent);
+
+                    // Reset colors and cursor only when reaching the last element
+                    if (topPointer === 0) {
+                        while (topRow.firstChild) {
+                            topRow.removeChild(topRow.firstChild);
+                        }
+                        for (let i = 0; i < MAX_BOX; i++) {
+                            addColorBox(topRow, getRandomColor());
+                        }
+                    }
                 } else {
                     addSmallText(smallText1, 'x' + smallText1.textContent);
 
@@ -133,16 +143,6 @@
 
                     if (smallText2.textContent.length > RESULT_TEXT_LENGTH) {
                         smallText2.textContent = '';
-                    }
-                }
-
-                // Reset colors and cursor if the pointer reaches the end
-                if (topPointer === 0) {
-                    while (topRow.firstChild) {
-                        topRow.removeChild(topRow.firstChild);
-                    }
-                    for (let i = 0; i < MAX_BOX; i++) {
-                        addColorBox(topRow, getRandomColor());
                     }
                 }
             }

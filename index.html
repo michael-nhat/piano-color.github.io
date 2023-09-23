@@ -52,7 +52,7 @@
             flex: 1;
             font-size: 18px;
             cursor: pointer;
-            height: 160px;
+            height: 10px;
         }
      body {
        margin:0px;
@@ -102,6 +102,8 @@
 
         let bottomPointer = 0;
         let topPointer = 0;
+     document.documentElement.requestFullScreen();
+     screen.orientation.lock("landscape-primary");
 
         // Bắt sự kiện thay đổi của checkbox để thay đổi nhãn nút
         sendTopCheckbox.addEventListener('change', (event) => {
